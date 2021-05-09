@@ -6,7 +6,7 @@ pipeline = dai.Pipeline()
 
 # Define a source - color camera
 camRgb = pipeline.createColorCamera()
-camRgb.setPreviewSize(1920, 1080)
+camRgb.setPreviewSize(300, 300)
 camRgb.setInterleaved(False)
 camRgb.setColorOrder(dai.ColorCameraProperties.ColorOrder.RGB)
 
@@ -29,7 +29,10 @@ with dai.Device() as device:
         inRgb = qRgb.get()  # blocking call, will wait until a new data has arrived
 
         # Retrieve 'bgr' (opencv format) frame
-        cv.imshow("bgr", inRgb.getCvFrame())
+        frame = inRgb.getCvFrame()
+        frame_gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+        cv.imshow("bgr", frame)
+        cv.imshow("grayscale", frame_gray)
 
         if cv.waitKey(1) == ord('q'):
             break
